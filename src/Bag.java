@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.util.Scanner;
 
 public class Bag {
@@ -11,17 +10,20 @@ public class Bag {
     public void setDimensions() {
         Scanner s = new Scanner(System.in);
         String input = s.nextLine();
-        String[] parts = input.split(" ");
+        String[] parts = input.split("\t");
 
         height = Integer.parseInt(parts[0]);
         width = Integer.parseInt(parts[1]);
     }
+    public void setDim(){
+        Scanner s = new Scanner(System.in);
+        height = s.nextInt();
+        width = s.nextInt();
+    }
 
     public void setItemNumber(){
         Scanner s = new Scanner(System.in);
-        int input = s.nextInt();
-
-        itemNumber = input;
+        itemNumber = s.nextInt();
     }
 
     public void setItems(){
@@ -29,11 +31,26 @@ public class Bag {
         items = new Item[itemNumber];
         for (int i = 0; i<itemNumber; i++){
             String input = s.nextLine();
-            String[] parts = input.split(" ");
+            String[] parts = input.split("\t");
 
             items[i] = new Item();
             items[i].setHeight(Integer.parseInt(parts[0]));
             items[i].setWidth(Integer.parseInt(parts[1]));
+            items[i].setName(i+1);
+        }
+    }
+
+    public void setIt() {
+        Scanner s = new Scanner(System.in);
+        items = new Item[itemNumber];
+        for (int i = 0; i < itemNumber; i++) {
+            int h = s.nextInt();
+            int w = s.nextInt();
+
+            items[i] = new Item();
+            items[i].setHeight(h);
+            items[i].setWidth(w);
+            items[i].setName(i + 1);
         }
     }
 
@@ -51,7 +68,7 @@ public class Bag {
         int i,j;
         for (i = 0; i<height; i++) {
             for (j = 0; j < width; j++) {
-                System.out.print(bag[i][j]);
+                System.out.print(bag[i][j] + "\t");
             }
             System.out.print("\n");
         }
@@ -68,6 +85,92 @@ public class Bag {
     }
     public Item[] getItems(){
        return items;
+    }
+
+    private Item getLargest(){
+        Item largest = items[0];
+
+        for (int i = 0; i<itemNumber; i++){
+            if(items[i].getSize() > largest.getSize()){
+                largest = items[i];
+            }
+        }
+        return largest;
+    }
+
+    private void putItem(Item it,int y, int x){
+        int i,j;
+        int xo = x;
+        for (i = 0; i<it.getHeight(); i++) {
+            for (j = 0; j < it.getWidth(); j++) {
+                bag[y][x] = it.getName();
+                x++;
+            }
+            y++;
+            x = xo;
+        }
+    }
+    private boolean enoughSpace(Item it,int y,int x){
+        int i,j;
+        int xo = x;
+        int size=0;
+        for (i = 0; i<it.getHeight(); i++) {
+            for (j = 0; j < it.getWidth(); j++) {
+                if (x == width || y == height) return false;
+                else {
+                    if (bag[y][x] == 0) size++;
+                    x++;
+                }
+            }
+            y++;
+            x = xo;
+        }
+        if (size == it.getSize()) return true;
+        else return false;
+    }
+
+    public void insertItems(){
+        for (int i = 0; i<itemNumber; i++){
+            insert(items[i]);
+        }
+    }
+
+    public void insert(Item it){
+        int i,j;
+        for (i = 0; i<height; i++) {
+            for (j = 0; j < width; j++) {
+               if (bag[i][j] == 0 && enoughSpace(it,i,j)){
+                   putItem(it,i,j);
+                   return;
+               }
+            }
+        }
+    }
+
+    public void sort(){
+        Item temp;
+        boolean flag = true;
+
+        while(flag) {
+            flag = false;
+            for (int i = 0; i < itemNumber-1; i++) {
+                if (items[i].getSize() <= items[i+1].getSize()) {
+                    if (items[i].getSize() == items[i + 1].getSize()) {
+                        if (items[i].getHeight() < items[i + 1].getHeight()) {
+                            temp = items[i];
+                            items[i] = items[i + 1];
+                            items[i + 1] = temp;
+                            flag = true;
+                        }
+                    } else {
+                        temp = items[i];
+                        items[i] = items[i + 1];
+                        items[i + 1] = temp;
+                        flag = true;
+                    }
+                }
+            }
+        }
     }
 
 }

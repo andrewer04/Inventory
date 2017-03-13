@@ -2,6 +2,7 @@
 public class Item {
     private int height;
     private int width;
+    private int name;
 
     public void setHeight(int h){
         height = h;
@@ -9,11 +10,21 @@ public class Item {
     public void setWidth(int w){
         width = w;
     }
+    public void setName(int name) {
+        this.name = name;
+    }
 
     public int getHeight(){
         return height;
     }
     public int getWidth(){
         return width;
+    }
+    public int getName() {
+        return name;
+    }
+
+    public int getSize(){
+        return height * width;
     }
 }
