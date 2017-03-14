@@ -17,9 +17,7 @@ public class Item {
     public int getHeight(){
         return height;
     }
-    public int getWidth(){
-        return width;
-    }
+    public int getWidth(){ return width;    }
     public int getName() {
         return name;
     }
@@ -27,4 +25,6 @@ public class Item {
     public int getSize(){
         return height * width;
     }
+    public int getMax() { return (height > width) ? height : width;}
+    public int getMin() { return (height < width) ? height : width;}
 }
